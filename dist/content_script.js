@@ -3867,43 +3867,42 @@ var FileSaver = __webpack_require__(0)
 
 chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
   html2canvas(document.body).then(function(canvas) {
+    var base64image = canvas.toDataURL("image/jpg")
 
-    var base64image = canvas.toDataURL("image/jpg");
+    var block = base64image.split(";")
+    var mimeType = block[0].split(":")[1] // In this case "image/jpg"
+    var realData = block[1].split(",")[1] // For example:  iVBORw0KGgouqw23....
 
-    var block = base64image.split(";");
-    var mimeType = block[0].split(":")[1]; // In this case "image/jpg"
-    var realData = block[1].split(",")[1]; // For example:  iVBORw0KGgouqw23....
-
-    var canvasBlob = b64toBlob(realData, mimeType);
+    var canvasBlob = b64toBlob(realData, mimeType)
 
     FileSaver.saveAs(canvasBlob, "screenshot.jpg")
   })
 })
 
 function b64toBlob(b64Data, contentType, sliceSize) {
-  contentType = contentType || '';
-  sliceSize = sliceSize || 512;
+  contentType = contentType || ''
+  sliceSize = sliceSize || 512
 
-  var byteCharacters = atob(b64Data);
-  var byteArrays = [];
+  var byteCharacters = atob(b64Data)
+  var byteArrays = []
 
   for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-    var slice = byteCharacters.slice(offset, offset + sliceSize);
+    var slice = byteCharacters.slice(offset, offset + sliceSize)
 
-    var byteNumbers = new Array(slice.length);
+    var byteNumbers = new Array(slice.length)
     for (var i = 0; i < slice.length; i++) {
-      byteNumbers[i] = slice.charCodeAt(i);
+      byteNumbers[i] = slice.charCodeAt(i)
     }
 
-    var byteArray = new Uint8Array(byteNumbers);
+    var byteArray = new Uint8Array(byteNumbers)
 
-    byteArrays.push(byteArray);
+    byteArrays.push(byteArray)
   }
 
   var blob = new Blob(byteArrays, {
     type: contentType
   })
-  return blob;
+  return blob
 }
 
 /***/ })
