@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack",
-    "watch": "webpack -w",
+    "watch": "webpack -w"
   },
   "author": "do7be",
   "license": "ISC",
