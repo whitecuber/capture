@@ -3862,18 +3862,17 @@ module.exports = g;
 /***/ (function(module, exports, __webpack_require__) {
 
 // 閲覧中のページのdocument.bodyはcontent_scriptでしか取得できない
-var html2canvas = __webpack_require__(1)
-var FileSaver = __webpack_require__(0)
+const html2canvas = __webpack_require__(1)
+const FileSaver = __webpack_require__(0)
 
 chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
   html2canvas(document.body).then(function(canvas) {
-    var base64image = canvas.toDataURL("image/jpg")
+    const base64image = canvas.toDataURL("image/jpg")
+    const block = base64image.split(";")
+    const mimeType = block[0].split(":")[1] // In this case "image/jpg"
+    const realData = block[1].split(",")[1] // For example:  iVBORw0KGgouqw23....
 
-    var block = base64image.split(";")
-    var mimeType = block[0].split(":")[1] // In this case "image/jpg"
-    var realData = block[1].split(",")[1] // For example:  iVBORw0KGgouqw23....
-
-    var canvasBlob = b64toBlob(realData, mimeType)
+    const canvasBlob = b64toBlob(realData, mimeType)
 
     FileSaver.saveAs(canvasBlob, "screenshot.jpg")
   })
@@ -3883,23 +3882,21 @@ function b64toBlob(b64Data, contentType, sliceSize) {
   contentType = contentType || ''
   sliceSize = sliceSize || 512
 
-  var byteCharacters = atob(b64Data)
-  var byteArrays = []
+  const byteCharacters = atob(b64Data)
+  let byteArrays = []
 
   for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-    var slice = byteCharacters.slice(offset, offset + sliceSize)
-
-    var byteNumbers = new Array(slice.length)
+    const slice = byteCharacters.slice(offset, offset + sliceSize)
+    let byteNumbers = new Array(slice.length)
     for (var i = 0; i < slice.length; i++) {
       byteNumbers[i] = slice.charCodeAt(i)
     }
-
-    var byteArray = new Uint8Array(byteNumbers)
+    const byteArray = new Uint8Array(byteNumbers)
 
     byteArrays.push(byteArray)
   }
 
-  var blob = new Blob(byteArrays, {
+  const blob = new Blob(byteArrays, {
     type: contentType
   })
   return blob
