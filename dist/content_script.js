@@ -3859,23 +3859,32 @@ module.exports = g;
 
 /***/ }),
 /* 5 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_html2canvas__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_html2canvas___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_html2canvas__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_file_saver__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_file_saver___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_file_saver__);
 // 閲覧中のページのdocument.bodyはcontent_scriptでしか取得できない
-const html2canvas = __webpack_require__(1)
-const FileSaver = __webpack_require__(0)
+
+
 
 chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
-  html2canvas(document.body).then(function(canvas) {
-    const base64image = canvas.toDataURL("image/jpg")
-    const block = base64image.split(";")
-    const mimeType = block[0].split(":")[1] // In this case "image/jpg"
-    const realData = block[1].split(",")[1] // For example:  iVBORw0KGgouqw23....
+  if (msg.mode === 'capture') {
+    __WEBPACK_IMPORTED_MODULE_0_html2canvas___default()(document.body).then(function(canvas) {
+      const base64image = canvas.toDataURL("image/jpg")
+      const block = base64image.split(";")
+      const mimeType = block[0].split(":")[1] // In this case "image/jpg"
+      const realData = block[1].split(",")[1] // For example:  iVBORw0KGgouqw23....
 
-    const canvasBlob = b64toBlob(realData, mimeType)
+      const canvasBlob = b64toBlob(realData, mimeType)
 
-    FileSaver.saveAs(canvasBlob, "screenshot.jpg")
-  })
+      __WEBPACK_IMPORTED_MODULE_1_file_saver___default.a.saveAs(canvasBlob, "screenshot.jpg")
+      sendResponse('captured')
+    })
+  }
 })
 
 function b64toBlob(b64Data, contentType, sliceSize) {
