@@ -25,10 +25,10 @@ function b64toBlob(b64Data, contentType, sliceSize) {
   const byteCharacters = atob(b64Data)
   let byteArrays = []
 
-  for (const offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+  for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
     const slice = byteCharacters.slice(offset, offset + sliceSize)
     let byteNumbers = new Array(slice.length)
-    for (const i = 0; i < slice.length; i++) {
+    for (let i = 0; i < slice.length; i++) {
       byteNumbers[i] = slice.charCodeAt(i)
     }
     const byteArray = new Uint8Array(byteNumbers)
