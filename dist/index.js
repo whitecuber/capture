@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 6);
+/******/ 	return __webpack_require__(__webpack_require__.s = 3);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -280,10 +280,7 @@ module.exports = __webpack_amd_options__;
 /* WEBPACK VAR INJECTION */}.call(exports, {}))
 
 /***/ }),
-/* 3 */,
-/* 4 */,
-/* 5 */,
-/* 6 */
+/* 3 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -299,7 +296,14 @@ document.getElementById('cap').addEventListener('click', () => {
     const realData = block[1].split(",")[1] // For example:  iVBORw0KGgouqw23....
     const canvasBlob = b64toBlob(realData, mimeType)
 
-    __WEBPACK_IMPORTED_MODULE_0_file_saver___default.a.saveAs(canvasBlob, "screenshot.jpg")
+    const fd = new FormData(document.getElementById('upload-form'))
+    fd.append('photo', canvasBlob)
+    fetch('http://localhost:3000/page/api/upload/', {
+      method: 'POST',
+      body: fd
+    })
+
+    //FileSaver.saveAs(canvasBlob, "screenshot.jpg")
   })
 })
 

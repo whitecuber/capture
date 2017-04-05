@@ -7,7 +7,14 @@ document.getElementById('cap').addEventListener('click', () => {
     const realData = block[1].split(",")[1] // For example:  iVBORw0KGgouqw23....
     const canvasBlob = b64toBlob(realData, mimeType)
 
-    FileSaver.saveAs(canvasBlob, "screenshot.jpg")
+    const fd = new FormData(document.getElementById('upload-form'))
+    fd.append('photo', canvasBlob)
+    fetch('http://localhost:3000/page/api/upload/', {
+      method: 'POST',
+      body: fd
+    })
+
+    //FileSaver.saveAs(canvasBlob, "screenshot.jpg")
   })
 })
 
